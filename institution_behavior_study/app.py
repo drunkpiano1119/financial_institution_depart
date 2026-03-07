@@ -37,7 +37,14 @@ def load_data(file_path: str, file_signature: tuple[float, int]):
         st.error(f"文件未找到: {file_path}")
         return None
 
-file_path = "bond_trades_all_in_one.csv"
+from pathlib import Path
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+import os
+
+BASE_DIR = Path(__file__).resolve().parent
+file_path = BASE_DIR / "bond_trades_all_in_one.csv"
 try:
     file_signature = (os.path.getmtime(file_path), os.path.getsize(file_path))
 except OSError:
@@ -47,7 +54,7 @@ if st.button("刷新数据"):
     st.cache_data.clear()
     st.rerun()
 
-df = load_data(file_path, file_signature)
+df = load_data(str(file_path), file_signature)
 
 if df is not None:
     footnote_texts = (
